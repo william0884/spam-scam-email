@@ -9,131 +9,51 @@ import (
 	"time"
 )
 
-type scammer struct {
-	Results []struct {
-		Gender string `json:"gender"`
-		Name   struct {
-			Title string `json:"title"`
-			First string `json:"first"`
-			Last  string `json:"last"`
-		} `json:"name"`
-		Location struct {
-			Street struct {
-				Number int    `json:"number"`
-				Name   string `json:"name"`
-			} `json:"street"`
-			City        string `json:"city"`
-			State       string `json:"state"`
-			Country     string `json:"country"`
-			Postcode    int    `json:"postcode"`
-			Coordinates struct {
-				Latitude  string `json:"latitude"`
-				Longitude string `json:"longitude"`
-			} `json:"coordinates"`
-			Timezone struct {
-				Offset      string `json:"offset"`
-				Description string `json:"description"`
-			} `json:"timezone"`
-		} `json:"location"`
-		Email string `json:"email"`
-		Login struct {
-			UUID     string `json:"uuid"`
-			Username string `json:"username"`
-			Password string `json:"password"`
-			Salt     string `json:"salt"`
-			Md5      string `json:"md5"`
-			Sha1     string `json:"sha1"`
-			Sha256   string `json:"sha256"`
-		} `json:"login"`
-		Dob struct {
-			Date time.Time `json:"date"`
-			Age  int       `json:"age"`
-		} `json:"dob"`
-		Registered struct {
-			Date time.Time `json:"date"`
-			Age  int       `json:"age"`
-		} `json:"registered"`
-		Phone string `json:"phone"`
-		Cell  string `json:"cell"`
-		ID    struct {
-			Name  string `json:"name"`
-			Value string `json:"value"`
-		} `json:"id"`
-		Picture struct {
-			Large     string `json:"large"`
-			Medium    string `json:"medium"`
-			Thumbnail string `json:"thumbnail"`
-		} `json:"picture"`
-		Nat string `json:"nat"`
-	} `json:"results"`
-	Info struct {
-		Seed    string `json:"seed"`
-		Results int    `json:"results"`
-		Page    int    `json:"page"`
-		Version string `json:"version"`
-	} `json:"info"`
-}
-
 type Webhistory struct {
-	ID        int       `json:"id"`
 	Timestamp time.Time `json:"timestamp"`
 	Duration  float64   `json:"duration"`
 	Data      struct {
 		URL       string `json:"url"`
-		Title     string `json:"title"`
-		Audible   bool   `json:"audible"`
-		Incognito bool   `json:"incognito"`
-		TabCount  int    `json:"tabCount"`
+
 	} `json:"data"`
 }
 
 
-type Data struct {
-Company string `json:"company"`
-Currency string `json:"currency"`
-}
-
-func Requestscammer() {
+func Requestperson() {
 	url := "https://randomuser.me/api/"
 
-  res, err := http.Get(url)
-  if err != nil {
-      fmt.Println(err)
-  }
-  defer res.Body.Close()
-  body, err := ioutil.ReadAll(res.Body)
-  if err != nil {
-      fmt.Println(err)
-  }
+  res, _ := http.Get(url)
 
-	var scam scammer
-	json.Unmarshal([]byte(body), &scam)
-	fmt.Printf(scam)
+  body, _ := ioutil.ReadAll(res.Body)
+	defer res.Body.Close()
+
+  //var data []Webhistory
+	var data interface{}
+
+  json.Unmarshal([]byte(body), &data)
+  //fmt.Println(data[0])
+	fmt.Printf("%+v\n", (data))
 
 	//fmt.Println(data)
 }
 
+	//fmt.Println(data)
+func Requestcurrency() {
+	url := "https://api.currencyfreaks.com/latest?apikey=4f7765e522f84a37ab63672b887ed45e"
 
-func Requestbusiness() {
-	url := "http://localhost:8000/data"
+  res, _ := http.Get(url)
 
-  res, err := http.Get(url)
-  if err != nil {
-      fmt.Println(err)
-  }
-  defer res.Body.Close()
-  body, err := ioutil.ReadAll(res.Body)
-  if err != nil {
-      fmt.Println(err)
-  }
+  body, _ := ioutil.ReadAll(res.Body)
+	defer res.Body.Close()
 
-	var company Data
-	json.Unmarshal([]byte(body), &company)
-	fmt.Printf(company.Company)
-	fmt.Printf(company.Currency)
+  //var data []Webhistory
+	var data interface{}
 
+  json.Unmarshal([]byte(body), &data)
+  fmt.Println(data)
 	//fmt.Println(data)
 }
+
 
 func Requestweb() {
 	url := "http://localhost:5600/api/0/buckets/aw-watcher-web-chrome/events?limit=1"
@@ -156,9 +76,16 @@ func Requestweb() {
   }
 
   for _, values := range data {
-		fmt.Println(values.Duration)
-   	fmt.Println(values.Timestamp)
-		fmt.Println(values.Data.URL)
+		datetime := values.Timestamp.Format("Mon, 02 Jan 2006 15:04:05") 
+
+		//fmt.Println(values.Timestamp.String)
+		fmt.Println(`Hello, My name is TITLE FIRSTNAME LASTNAME and I am located
+								in CITY, COUNTRY. My company is COMPANY. On ` + datetime +
+								`you visited the url` + values.Data.URL +  `. You must send 35
+								dollars via this link: example.com within 7 days of opening
+								this email. If you do not I will tell your friends and family
+								that you visited the site. Be kind, TITLE FIRSTNAME LASTNAME`)
+
 	}
 	//fmt.Println(data)
 }
