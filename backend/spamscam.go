@@ -55,7 +55,7 @@ func Requestcurrency() {
 }
 
 
-func Requestweb() {
+func Requestweb() string {
 	url := "http://localhost:5600/api/0/buckets/aw-watcher-web-chrome/events?limit=1"
 
   res, err := http.Get(url)
@@ -75,17 +75,18 @@ func Requestweb() {
       panic(err)
   }
 
-  for _, values := range data {
-		datetime := values.Timestamp.Format("Mon, 02 Jan 2006 15:04:05") 
+  //for _, values := range data {
+		//datetime := values.Timestamp.Format("Mon, 02 Jan 2006 15:04:05")
 
-		//fmt.Println(values.Timestamp.String)
-		fmt.Println(`Hello, My name is TITLE FIRSTNAME LASTNAME and I am located
-								in CITY, COUNTRY. My company is COMPANY. On ` + datetime +
-								`you visited the url` + values.Data.URL +  `. You must send 35
-								dollars via this link: example.com within 7 days of opening
-								this email. If you do not I will tell your friends and family
-								that you visited the site. Be kind, TITLE FIRSTNAME LASTNAME`)
+	//	fmt.Println(values)
+	//}
+	var urls = data[0].Data.URL
+	var times = data[0].Timestamp.Format("Mon, 02 Jan 2006 15:04:05")
 
-	}
-	//fmt.Println(data)
+	//fmt.Println(data[0].URL)
+	//fmt.Println(data[0].TIMESTAMP])
+	//datetime := values.Timestamp.Format("Mon, 02 Jan 2006 15:04:05")
+	Bodytext := `Hello, My name is MR  BARRY LONG and I am located in SINGAPORE, SINGAPORE. My company is APPLE LTD. On ` + times + ` you visited the url` + urls +`. You must send 35 dollars via this link: example.com within 7 days of opening this email. If you do not I will tell your friends and family that you visited the site. Be kind, MR BARRY LONG`
+	//return Bodytext
+	return Bodytext
 }
